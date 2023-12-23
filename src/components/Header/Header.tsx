@@ -5,9 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -15,8 +13,8 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Avatar from '@mui/material/Avatar';
 import ThemeToggleButton from '../ThemeToggleButton';
 import { useMediaQuery } from '@mui/material';
-
-const pages = ['Products', 'Pricing', 'Blog'];
+import { useTheme } from '@mui/material';
+import NextLink from "next/link";
 
 export type HeaderProps = {
   ColorModeContext: React.Context<{toggleColorMode: () => void}>
@@ -25,24 +23,17 @@ export type HeaderProps = {
 const Header = (props: HeaderProps) => {
 
   const {ColorModeContext} = props;
+  const theme = useTheme();
 
   const tabletCheck = useMediaQuery('(min-width: 768px)');
 
   const {data:session} = useSession();
   const userProfileImg = session?.user?.image as string;
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -50,7 +41,7 @@ const Header = (props: HeaderProps) => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{marginBottom: '40px'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -71,43 +62,6 @@ const Header = (props: HeaderProps) => {
           >
             DataSoft
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -127,21 +81,9 @@ const Header = (props: HeaderProps) => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
         {
           tabletCheck && (
-            <Box sx={{paddingRight: 5}}>
+            <Box sx={{paddingRight: 5, marginLeft: "auto"}}>
                 <Typography>{session?.user?.email}</Typography>
             </Box>
           )
@@ -169,6 +111,15 @@ const Header = (props: HeaderProps) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <NextLink
+                href={'/dashboard/profile'}
+                style={{
+                  color: theme.palette.text.primary,
+                  textDecoration: "none"
+                }}
+              >
+                <Typography textAlign={"center"}>Profile</Typography>
+              </NextLink>
                 <MenuItem onClick={() => session ? signOut() : signIn()}>
                   <Typography textAlign="center">{session ? 'Logout' : 'Login'}</Typography>
                 </MenuItem>

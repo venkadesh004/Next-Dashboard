@@ -1,26 +1,20 @@
 import React from "react";
 import {Box, Grid, Paper} from "@mui/material";
-
-const dataCard = "p-[20px]";
-const topCardsContainer = "grid grid-cols-1 md:grid-cols-3";
+import DataRibbon from "@/components/Dashboard/DataRibbon";
+import TransactionPerDay from "@/components/Dashboard/TransactionPerDay";
+import TransactionBottomRow from "@/components/Dashboard/TransactionBottomRow";
 
 const Dashboard = () => {
     return (
         <Box>
-            <Grid container gap={2} className={topCardsContainer}>
-                <Grid>
-                    <Paper className={dataCard}>xs=4</Paper>
-                </Grid>
-                <Grid>
-                    <Paper className={dataCard}>xs=4</Paper>
-                </Grid>
-                <Grid>
-                    <Paper className={dataCard}>xs=4</Paper>
-                </Grid>
+            <Grid container gap={4} marginTop={2}>  
+                {/* Data Ribbon - showing numerical stats */}
+                <DataRibbon />
+                {/* TransactionsPerDay - graph - numerical cards */}
+                <TransactionPerDay />
             </Grid>
-            <Grid xs={12} marginY={2}>
-                <Paper className={dataCard}>xs=8</Paper>
-            </Grid>
+            {/* Transaction Doughnut charts button row - a few doughnut charts to break down some data into fractions */}
+            <TransactionBottomRow />
         </Box>
     );
 }

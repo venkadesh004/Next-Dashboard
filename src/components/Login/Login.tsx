@@ -12,7 +12,6 @@ const Login = () => {
     }
 
     return <>
-        <h2>Please Log in</h2><br />
         <Button variant='contained' color='success' onClick={() => signIn()}>Sign In</Button>
     </>
 }
